@@ -41,7 +41,7 @@ Parameters:
       - True
       - False
 
-Mappings:
+#Mappings:
 
 Conditions:
   BYOSubnet: !Equals [!Ref BYOSubnet,True]
@@ -54,10 +54,10 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       BlockDeviceMappings:
-        DeviceName: /dev/sda1
-        Ebs:
-          VolumeSize: 20
-      ImageId: String     # required
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 30
+      ImageId: ami-0703fc157f1b87f6c
       InstanceType: !Ref InstanceType
       KeyName: !Ref Key
       SecurityGroupIds:                # optional, list of String
@@ -69,20 +69,24 @@ Resources:
         - BYOSubnet
         - !Ref Subnet
         - !ImportValue MagicMachinePublicSubnet
-    SG:
-      Type: AWS::EC2::SecurityGroup
-      Condition: MakeSG
-      Properties:
-        GroupDescription: Allows RDP to all internet.
-        GroupName: MagicMachineSG
-        SecurityGroupIngress:                # optional, list of Ingress
-          - CidrIp: 0.0.0.0/0
-            FromPort: 3389
-            IpProtocol: tcp
-            ToPort: 3389
-        VpcId: !If
-          - BYOVPC
-          - VPC
-          - !ImportValue MagicMachineVPC
+  SG:
+    Type: AWS::EC2::SecurityGroup
+    Condition: MakeSG
+    Properties:
+      GroupDescription: Allows RDP to all internet.
+      GroupName: MagicMachineSG
+      SecurityGroupIngress:                # optional, list of Ingress
+        - CidrIp: 0.0.0.0/0
+          FromPort: 3389
+          IpProtocol: tcp
+          ToPort: 3389
+      VpcId: !If
+        - BYOVPC
+        - VPC
+        - !ImportValue MagicMachineVPC
 
 Outputs:
+  InstanceId:
+    Value: !Ref Instance
+  InstancePublicDnsName:
+    Value: !GetAtt Instance.PublicDnsName
