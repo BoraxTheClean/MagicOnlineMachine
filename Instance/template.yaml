@@ -1,0 +1,59 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: >
+  EC2 Instance running windows AMI for Magic Online
+
+Parameters:
+
+  InstanceType:
+    Type: String
+    AllowedValues:
+      - t2.medium
+  Key:
+    Type: AWS::EC2::KeyPair::KeyName
+
+  Subnet:
+    Type: AWS::EC2::Subnet::Id
+
+  BYOSubnet:
+    Type: String
+    AllowedValues:
+      - True
+      - False
+
+  Subnet:
+    Type: AWS::EC2::SecurityGroup::Id
+
+  BYOSG:
+    Type: String
+    AllowedValues:
+      - True
+      - False
+
+Mappings:
+
+Conditions:
+  BYOSubnet: !Equals [!Ref BYOSubnet,True]
+  BYOSG: !Equals [!Ref BYOSG,True]
+
+Resources:
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: String     # required
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref Key
+      SecurityGroupIds:                # optional, list of String
+        - !If
+          - BYOSG
+          - !Ref BYOSG
+          - !Ref SG
+      SubnetId: !If
+        - BYOSubnet
+        - !Ref Subnet
+        - !ImportValue MagicMachinePublicSubnet
+      Volumes:                # optional, list of Volume
+        - Volume
+
+Outputs:
