@@ -4,8 +4,6 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: >
   Magic Machine Deployment Template
 
-Metadata:
-
 Parameters:
   Bucket:
     Type: String
@@ -27,10 +25,6 @@ Parameters:
     Type: String
     Default: 10.0.0.0/20
 
-Mappings:
-
-Conditions:
-
 Resources:
   InstanceStack:
     Type: AWS::CloudFormation::Stack
@@ -49,6 +43,3 @@ Resources:
         SubnetCIDR: !Ref SubnetCIDR
         CIDR: !Ref CIDR
       TemplateURL: !Sub "https://s3.amazonaws.com/${Bucket}/MagicOnlineMachine/VPC/template.yaml"
-
-
-Outputs:
