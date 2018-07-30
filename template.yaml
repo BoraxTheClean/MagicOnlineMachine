@@ -3,7 +3,6 @@ AWSTemplateFormatVersion: "2010-09-09"
 
 Description: >
   Magic Machine Deployment Template
-
 Parameters:
   Bucket:
     Type: String
@@ -11,11 +10,13 @@ Parameters:
 
   InstanceType:
     Type: String
+    Default: t2.medium
     AllowedValues:
       - t2.medium
 
   Key:
     Type: AWS::EC2::KeyPair::KeyName
+    Default: Owen
 
   CIDR:
     Type: String
@@ -35,7 +36,6 @@ Resources:
         Subnet: !GetAtt VPCStack.Outputs.PublicSubnet
         VPC: !GetAtt VPCStack.Outputs.VPC
       TemplateURL: !Sub 'https://s3.amazonaws.com/${Bucket}/MagicOnlineMachine/Instance/template.yaml'
-
   VPCStack:
     Type: AWS::CloudFormation::Stack
     Properties:
