@@ -13,15 +13,15 @@ jobs:
           name: Deploy
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]||[ "${CIRCLE_BRANCH}" == "Add-Master-Template" ]; then
-              aws s3 cp Instance/template.yaml s3://owen-public-production-bucket/Instance/template.yaml
+              aws s3 cp Instance/template.yaml s3://owen-public-production-bucket/MagicOnlineMachine/Instance/template.yaml
               aws s3api put-object \
                 --bucket owen-public-production-bucket \
-                --key Instance/template.yaml \
+                --key MagicOnlineMachine/Instance/template.yaml \
                 --acl public-read
 
-              aws s3 cp VPC/template.yaml s3://owen-public-production-bucket/VPC/template.yaml
+              aws s3 cp VPC/template.yaml s3://owen-public-production-bucket/MagicOnlineMachine/VPC/template.yaml
               aws s3api put-object \
                 --bucket owen-public-production-bucket \
-                --key VPC/template.yaml \
+                --key MagicOnlineMachine/VPC/template.yaml \
                 --acl public-read
             fi
