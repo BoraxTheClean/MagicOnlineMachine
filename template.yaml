@@ -32,9 +32,9 @@ Resources:
       Parameters:                # optional, map of String
         InstanceType: !Ref InstanceType
         Key: !Ref Key
-        Subnet: !GetAtt VPCStack.PublicSubnet
-        VPC: !GetAtt VPCStack.VPC
-      TemplateURL: !Sub "https://s3.amazonaws.com/${Bucket}/MagicOnlineMachine/Instance/template.yaml"
+        Subnet: !GetAtt VPCStack.Outputs.PublicSubnet
+        VPC: !GetAtt VPCStack.Outputs.VPC
+      TemplateURL: !Sub 'https://s3.amazonaws.com/${Bucket}/MagicOnlineMachine/Instance/template.yaml'
 
   VPCStack:
     Type: AWS::CloudFormation::Stack
@@ -42,4 +42,4 @@ Resources:
       Parameters:                # optional, map of String
         SubnetCIDR: !Ref SubnetCIDR
         CIDR: !Ref CIDR
-      TemplateURL: !Sub "https://s3.amazonaws.com/${Bucket}/MagicOnlineMachine/VPC/template.yaml"
+      TemplateURL: !Sub 'https://s3.amazonaws.com/${Bucket}/MagicOnlineMachine/VPC/template.yaml'
