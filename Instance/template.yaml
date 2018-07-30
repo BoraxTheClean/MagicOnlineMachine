@@ -16,38 +16,13 @@ Parameters:
   Subnet:
     Type: AWS::EC2::Subnet::Id
 
-  BYOSubnet:
-    Type: String
-    AllowedValues:
-      - True
-      - False
-
   VPC:
     Type: AWS::EC2::VPC::Id
-
-  BYOVPC:
-    Type: String
-    AllowedValues:
-      - True
-      - False
-
 
   Subnet:
     Type: AWS::EC2::SecurityGroup::Id
 
-  BYOSG:
-    Type: String
-    AllowedValues:
-      - True
-      - False
-
 #Mappings:
-
-Conditions:
-  BYOSubnet: !Equals [!Ref BYOSubnet,True]
-  BYOSG: !Equals [!Ref BYOSG,True]
-  MakeSG: !Equals [!Ref BYOSG,False]
-  BYOVPC: !Equals [!Ref BYOVPC,True]
 
 Resources:
   Instance:
@@ -60,18 +35,10 @@ Resources:
       ImageId: ami-0703fc157f1b87f6c
       InstanceType: !Ref InstanceType
       KeyName: !Ref Key
-      SecurityGroupIds:                # optional, list of String
-        - !If
-          - BYOSG
-          - !Ref BYOSG
-          - !Ref SG
-      SubnetId: !If
-        - BYOSubnet
-        - !Ref Subnet
-        - !ImportValue MagicMachinePublicSubnet
+      SecurityGroupIds: !Ref SG
+      SubnetId: !Ref Subnet
   SG:
     Type: AWS::EC2::SecurityGroup
-    Condition: MakeSG
     Properties:
       GroupDescription: Allows RDP to all internet.
       GroupName: MagicMachineSG
@@ -80,10 +47,7 @@ Resources:
           FromPort: 3389
           IpProtocol: tcp
           ToPort: 3389
-      VpcId: !If
-        - BYOVPC
-        - VPC
-        - !ImportValue MagicMachineVPC
+      VpcId: !Ref VPC
 
 Outputs:
   InstanceId:
