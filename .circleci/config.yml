@@ -12,7 +12,7 @@ jobs:
       - run:
           name: Deploy
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]||[ "${CIRCLE_BRANCH}" == "Add-Master-Template" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
               aws s3 cp Instance/template.yaml s3://owen-public-production-bucket/MagicOnlineMachine/Instance/template.yaml
               aws s3api put-object-acl \
                 --bucket owen-public-production-bucket \
